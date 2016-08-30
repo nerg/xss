@@ -1,31 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Bootstrap 101 Template</title>
-
-    <!-- Bootstrap -->
+    <title>Student Registration Page</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
   </head>
   <body>
-    <h2>Student information</h2>
-    <label for="name">Name</label>
-    <input type="text" value="" name="name">
-    <input type="submit">
+    <div class="container">
+    <?php
+      if ($_GET == null ||
+          $_GET['name'] == null ||
+          $_GET['address'] == null ||
+          $_GET['date_of_birth'] == null) {
+    ?>
+    <form action="" method="GET">
+    <div class="form-group">
+      <h2>Student Registration</h2><br>
+      <label for="name">Name</label>
+      <input class="form-control" type="text" value="" name="name"><br>
+      <label for="address">Address</label>
+      <input class="form-control" type="text" value="" name="address"><br>
+      <label for="date_of_birth">Date of birth</label>
+      <input class="form-control" type="text" value="" name="date_of_birth"><br>
+      <input class="btn btn-default" type="submit" value="Register">
+      </div>
+    </form>
+    <?php
+      } else {
+        $mysqli = new mysqli("localhost", "root", "", "xss");
+        if ($mysqli->connect_errno) echo "Failed (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
+        // Variables utilisées pour l'injection SQL
+        $name          = $_GET['name'];
+        $address       = $_GET['address'];
+        $date_of_birth = $_GET['date_of_birth'];
+
+        // Requête SQL vulnérable
+        $query = "INSERT INTO students VALUES(\"$name\", \"$address\", \"$date_of_birth\")";
+
+        if (!$mysqli->multi_query($query)) {
+          echo "<div class='alert alert-danger' role='alert'><strong>Multi query failed:</strong> (" . $mysqli->errno . ") " . $mysqli->error."</div>";
+        } else {
+          echo "<br><br><br><div class='alert alert-success' role='alert'><strong>Registration success for student $name !</strong></div>";
+          echo "<div style='height:800px'></div>";
+          echo "<pre>$query</pre><br><br>";
+        }
+    }
+    ?>
+    </div>
   </body>
 </html>
+<?php
+
+/*
+// URL
+// name=robert",'',''); delete from students;&address='xss'&date_of_birth='xss'
+
+// ENTER
+// name=robert",'',''); delete from students;
+
+CREATE TABLE `students` (
+  `name` varchar(64),
+  `address` varchar(255),
+  `date_of_birth` varchar(10)
+);
+*/
+?>

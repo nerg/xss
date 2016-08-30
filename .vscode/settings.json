@@ -1,0 +1,4 @@
+// Placez vos paramètres dans ce fichier pour remplacer les paramètres par défaut et les paramètres utilisateur.
+{
+  "php.validate.executablePath": "C:\\wamp\\bin\\php\\php5.5.12\\php.exe"
+}

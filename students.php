@@ -23,8 +23,7 @@
       <input class="form-control" type="text" value="" name="date_of_birth"><br>
       <input class="btn btn-default" type="submit" value="Register">
       </div>
-    </form>
-    
+    </form>    
     <?php
       } else {
         $mysqli = new mysqli("localhost", "root", "", "xss");

@@ -24,6 +24,7 @@
       <input class="btn btn-default" type="submit" value="Register">
       </div>
     </form>
+    
     <?php
       } else {
         $mysqli = new mysqli("localhost", "root", "", "xss");
